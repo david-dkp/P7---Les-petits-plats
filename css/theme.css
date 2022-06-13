@@ -3,6 +3,10 @@
 :root {
     /*Themes attributes*/
     --color-primary: #d04f4f;
+    --color-ingredient-primary: #3282f7;
+    --color-appliance-primary: #68d9a4;
+    --color-ustensils-primary: #ed6454;
+
     --font-title: "DM Sans", sans-serif;
     --font-body: "Lato", sans-serif;
 
