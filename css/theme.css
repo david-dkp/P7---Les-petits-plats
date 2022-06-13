@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Lato:wght@400;700&family=Roboto&display=swap");
+
+:root {
+    /*Themes attributes*/
+    --color-primary: #d04f4f;
+    --font-title: "DM Sans", sans-serif;
+    --font-body: "Lato", sans-serif;
+
+    --color-light-grey: #e7e7e7;
+}
