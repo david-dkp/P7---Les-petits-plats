@@ -129,7 +129,7 @@ main section {
     top: 0;
     left: 0;
     position: absolute;
-    display: flex;
+    display: none;
     flex-direction: column;
     border-radius: 5px;
 }
@@ -180,4 +180,75 @@ main section {
 .dropdown-item-name {
     font-size: 0.9em;
     font-weight: 400;
+}
+
+.recipees-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    width: 100%;
+    margin-top: 1.2rem;
+    list-style: none;
+    gap: 2rem;
+}
+
+.recipe-card-item {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    background-color: var(--color-light-grey);
+}
+
+.recipe-image {
+    object-fit: cover;
+    height: 125px;
+}
+
+.recipe-infos-container {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.recipe-infos-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.recipe-duration-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.recipe-duration-text {
+    line-height: 0;
+    font-weight: 700;
+}
+
+.recipe-name {
+    font-size: 1.1em;
+    font-weight: 400;
+}
+
+.recipe-infos-details {
+    display: flex;
+    font-size: 0.7em;
+}
+
+.recipe-ingredients-list {
+    flex: 1;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.recipe-description {
+    flex: 1;
+}
+
+.recipe-ingredient-name {
+    font-weight: 700;
 }
