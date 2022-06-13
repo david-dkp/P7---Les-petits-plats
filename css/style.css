@@ -194,6 +194,7 @@ main section {
 .recipe-card-item {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     border-radius: 5px;
     background-color: var(--color-light-grey);
 }
@@ -246,6 +247,8 @@ main section {
 }
 
 .recipe-description {
+    overflow: auto;
+    max-height: 100px;
     flex: 1;
 }
 
