@@ -49,17 +49,17 @@ main section {
     font-family: var(--font-title);
     background-color: var(--color-light-grey);
     transition: all 0.3s ease-in-out;
-    padding-right: 0.5em;
+    padding-right: 1em;
     border: none;
     align-items: center;
 }
 
 .search-input input {
     flex: 1;
-    padding: 0.5em;
+    padding: 1em;
     background: none;
     border: none;
-    font-size: 1.2rem;
+    font-size: 1em;
 }
 
 .search-input i {
@@ -97,15 +97,15 @@ main section {
     line-height: unset;
 }
 
-.search-filter-item-ingredient {
+.bg-ingredient {
     background-color: var(--color-ingredient-primary);
 }
 
-.search-filter-item-appliance {
+.bg-appliance {
     background-color: var(--color-appliance-primary);
 }
 
-.search-filter-item-ustensil {
+.bg-ustensil {
     background-color: var(--color-ustensils-primary);
 }
 
@@ -114,4 +114,70 @@ main section {
     background: none;
     padding: 0;
     margin: 0;
+}
+
+.search-dropdown-buttons {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.dropdown-container {
+    position: relative;
+}
+
+.dropdown-content-container {
+    top: 0;
+    left: 0;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+}
+
+.dropdown-button {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 1em 1em;
+    border-radius: 5px;
+    color: white;
+    border: none;
+}
+
+.dropdown-button i {
+    line-height: unset;
+}
+
+.dropdown-input {
+    font-size: 0.7rem;
+}
+
+.dropdown-input *,
+.dropdown-input input::placeholder {
+    color: white;
+}
+
+.dropdown-input input {
+    font-size: 1.2em;
+}
+
+.dropdown-list {
+    list-style: none;
+    color: white;
+    padding-inline: 1rem;
+    padding-bottom: 1rem;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(6, auto);
+}
+
+.dropdown-list-item {
+    padding-block: 0.4em;
+    padding-right: 0.8em;
+    min-width: 100px;
+}
+
+.dropdown-item-name {
+    font-size: 0.9em;
+    font-weight: 400;
 }
