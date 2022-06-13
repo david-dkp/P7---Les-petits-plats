@@ -37,16 +37,33 @@ main section {
 }
 
 .search-input {
+    display: flex;
     width: 100%;
-    padding: 0.5em;
     border-radius: 5px;
-    font-size: 1.2rem;
     font-family: var(--font-title);
     background-color: var(--color-light-grey);
     transition: all 0.3s ease-in-out;
+    padding-right: 0.5em;
     border: none;
+    align-items: center;
 }
 
-.search-input::placeholder {
+.search-input input {
+    flex: 1;
+    padding: 0.5em;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+}
+
+.search-input i {
+    font-size: 1.3em;
+}
+
+.search-input input::placeholder {
     opacity: 0.35;
+}
+
+.search-input input:focus {
+    outline: none;
 }
