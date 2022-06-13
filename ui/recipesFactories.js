@@ -73,3 +73,34 @@ export const createRecipeElement = ({
 
     return recipeCardItemElement
 }
+
+export const createFilterChip = ({ label, type, onRemoveFilterClick }) => {
+    const searchFilterItemElement = document.createElement("li")
+    searchFilterItemElement.classList.add("search-filter-item")
+
+    if (type === "ingredient") {
+        searchFilterItemElement.classList.add("bg-ingredient")
+    } else if (type === "appliance") {
+        searchFilterItemElement.classList.add("bg-appliance")
+    } else if (type === "ustensil") {
+        searchFilterItemElement.classList.add("bg-ustensil")
+    }
+
+    const searchFilterItemNameElement = document.createElement("p")
+    searchFilterItemNameElement.classList.add("search-filter-item-name")
+    searchFilterItemNameElement.textContent = label
+
+    const removeFilterButtonElement = document.createElement("button")
+    removeFilterButtonElement.classList.add("icon-button")
+    removeFilterButtonElement.onclick = onRemoveFilterClick
+
+    const removeFilterIconElement = document.createElement("i")
+    removeFilterIconElement.classList.add("fa-regular", "fa-circle-xmark")
+
+    removeFilterButtonElement.appendChild(removeFilterIconElement)
+
+    searchFilterItemElement.appendChild(searchFilterItemNameElement)
+    searchFilterItemElement.appendChild(removeFilterButtonElement)
+
+    return searchFilterItemElement
+}

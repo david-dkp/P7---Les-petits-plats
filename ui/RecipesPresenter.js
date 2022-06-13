@@ -2,6 +2,24 @@ import recipesModel from "../data/recipesModel.js"
 
 class RecipesPresenter {
     #recipes = []
+    #filterChipsUiStates = [
+        {
+            type: "ingredient",
+            label: "Coco",
+        },
+        {
+            type: "appliance",
+            label: "Four",
+        },
+        {
+            type: "ustensil",
+            label: "Spoon",
+        },
+        {
+            type: "ingredient",
+            label: "Milk",
+        },
+    ]
 
     static getInstance() {
         if (!this.instance) {
@@ -17,6 +35,7 @@ class RecipesPresenter {
     setView(view) {
         this.view = view
         this.#getInitialRecipes()
+        this.view.renderFilterChips(this.#filterChipsUiStates)
     }
 
     #getRecipeItemUiState(recipe) {
@@ -45,6 +64,18 @@ class RecipesPresenter {
             .catch((error) => {
                 console.log(error)
             })
+    }
+
+    onRemoveFilterClick(filterChip) {
+        const filterChipIndex = this.#filterChipsUiStates.findIndex(
+            (filterChipUiState) =>
+                filterChipUiState.type === filterChip.type &&
+                filterChipUiState.label === filterChip.label
+        )
+        if (filterChipIndex !== -1) {
+            this.#filterChipsUiStates.splice(filterChipIndex, 1)
+            this.view.renderFilterChips(this.#filterChipsUiStates)
+        }
     }
 }
 
