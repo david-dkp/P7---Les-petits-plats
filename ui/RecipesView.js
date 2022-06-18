@@ -44,6 +44,7 @@ class RecipesView {
     dropdownContentUstensilsElement = document.querySelector(
         ".dropdown-content-ustensils"
     )
+    searchInputElement = document.querySelector(".search-input input")
 
     #currentDropdown = null
 
@@ -82,6 +83,10 @@ class RecipesView {
             icon.addEventListener("click", () => {
                 this.hideDropdown(this.#currentDropdown)
             })
+        })
+
+        this.searchInputElement.addEventListener("keyup", (e) => {
+            this.presenter.onSearchQueryChange(e.target.value)
         })
     }
 

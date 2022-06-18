@@ -1,4 +1,5 @@
 import recipesModel from "../data/recipesModel.js"
+import { removeDuplicates } from "../utils/arrayUtils.js"
 
 class RecipesPresenter {
     #recipes = []
@@ -23,6 +24,7 @@ class RecipesPresenter {
     #ingredientsList = []
     #appliancesList = []
     #ustensilsList = []
+    #searchQuery = ""
 
     static getInstance() {
         if (!this.instance) {
@@ -60,6 +62,7 @@ class RecipesPresenter {
     #setRecipes(recipes) {
         this.#recipes = recipes
         this.view.renderRecipes(this.#recipes.map(this.#getRecipeItemUiState))
+        this.changeFiltersListForRecipes(recipes)
     }
 
     #setIngredients(ingredientsList) {
@@ -101,6 +104,132 @@ class RecipesPresenter {
             this.#filterChipsUiStates.splice(filterChipIndex, 1)
             this.view.renderFilterChips(this.#filterChipsUiStates)
         }
+        this.loadRecipes()
+    }
+
+    onIngredientClick(ingredient) {
+        const filterChipIndex = this.#filterChipsUiStates.findIndex(
+            (filterChipUiState) =>
+                filterChipUiState.type === "ingredient" &&
+                filterChipUiState.label === ingredient
+        )
+        if (filterChipIndex === -1) {
+            this.#filterChipsUiStates.push({
+                type: "ingredient",
+                label: ingredient,
+            })
+            this.view.renderFilterChips(this.#filterChipsUiStates)
+        } else {
+            return
+        }
+
+        this.loadRecipes()
+    }
+
+    onApplianceClick(appliance) {
+        const filterChipIndex = this.#filterChipsUiStates.findIndex(
+            (filterChipUiState) =>
+                filterChipUiState.type === "appliance" &&
+                filterChipUiState.label === appliance
+        )
+        if (filterChipIndex === -1) {
+            this.#filterChipsUiStates.push({
+                type: "appliance",
+                label: appliance,
+            })
+            this.view.renderFilterChips(this.#filterChipsUiStates)
+        } else {
+            return
+        }
+
+        this.loadRecipes()
+    }
+
+    onUstensilClick(ustensil) {
+        const filterChipIndex = this.#filterChipsUiStates.findIndex(
+            (filterChipUiState) =>
+                filterChipUiState.type === "ustensil" &&
+                filterChipUiState.label === ustensil
+        )
+        if (filterChipIndex === -1) {
+            this.#filterChipsUiStates.push({
+                type: "ustensil",
+                label: ustensil,
+            })
+            this.view.renderFilterChips(this.#filterChipsUiStates)
+        } else {
+            return
+        }
+
+        this.loadRecipes()
+    }
+
+    getFilterIngredients() {
+        return this.#filterChipsUiStates
+            .filter(
+                (filterChipUiState) => filterChipUiState.type === "ingredient"
+            )
+            .map((filterChipUiState) => filterChipUiState.label)
+    }
+
+    getFilterAppliances() {
+        return this.#filterChipsUiStates
+            .filter(
+                (filterChipUiState) => filterChipUiState.type === "appliance"
+            )
+            .map((filterChipUiState) => filterChipUiState.label)
+    }
+
+    getFilterUstensils() {
+        return this.#filterChipsUiStates
+            .filter(
+                (filterChipUiState) => filterChipUiState.type === "ustensil"
+            )
+            .map((filterChipUiState) => filterChipUiState.label)
+    }
+
+    loadRecipes() {
+        this.model
+            .getRecipesWithFilter({
+                ingredients: this.getFilterIngredients(),
+                appliances: this.getFilterAppliances(),
+                ustencils: this.getFilterUstensils(),
+                searchQuery: this.#searchQuery,
+            })
+            .then((recipes) => {
+                this.#setRecipes(recipes)
+            })
+    }
+
+    changeFiltersListForRecipes(recipes) {
+        const ingredients = []
+        const appliances = []
+        const ustensils = []
+        recipes.forEach((recipe) => {
+            recipe.ingredients.forEach((ingredient) => {
+                if (!ingredients.includes(ingredient.ingredient)) {
+                    ingredients.push(ingredient.ingredient)
+                }
+            })
+            if (!appliances.includes(recipe.appliance)) {
+                appliances.push(recipe.appliance)
+            }
+
+            recipe.ustensils.forEach((ustensil) => {
+                if (!ustensils.includes(ustensil)) {
+                    ustensils.push(ustensil)
+                }
+            })
+        })
+        this.#setIngredients(ingredients)
+        this.#setAppliances(appliances)
+        this.#setUstensils(ustensils)
+    }
+
+    onSearchQueryChange(searchQuery) {
+        console.log(searchQuery)
+        this.#searchQuery = searchQuery
+        this.loadRecipes()
     }
 }
 
