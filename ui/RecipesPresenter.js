@@ -20,6 +20,9 @@ class RecipesPresenter {
             label: "Milk",
         },
     ]
+    #ingredientsList = []
+    #appliancesList = []
+    #ustensilsList = []
 
     static getInstance() {
         if (!this.instance) {
@@ -30,12 +33,48 @@ class RecipesPresenter {
 
     constructor(model) {
         this.model = model
+        this.#getInitialData()
     }
 
-    setView(view) {
+    #getInitialData() {
+        this.model.getRecipes().then((recipes) => {
+            this.#setRecipes(recipes)
+        })
+        this.model.getIngredients().then((ingredients) => {
+            this.#setIngredients(ingredients)
+        })
+        this.model.getAppliances().then((appliances) => {
+            this.#setAppliances(appliances)
+        })
+        this.model.getUstensils().then((ustensils) => {
+            this.#setUstensils(ustensils)
+        })
+    }
+
+    async setView(view) {
         this.view = view
-        this.#getInitialRecipes()
         this.view.renderFilterChips(this.#filterChipsUiStates)
+        this.view.renderRecipes(this.#recipes.map(this.#getRecipeItemUiState))
+    }
+
+    #setRecipes(recipes) {
+        this.#recipes = recipes
+        this.view.renderRecipes(this.#recipes.map(this.#getRecipeItemUiState))
+    }
+
+    #setIngredients(ingredientsList) {
+        this.#ingredientsList = ingredientsList
+        this.view.renderIngredients(this.#ingredientsList)
+    }
+
+    #setAppliances(appliancesList) {
+        this.#appliancesList = appliancesList
+        this.view.renderAppliances(this.#appliancesList)
+    }
+
+    #setUstensils(ustensilsList) {
+        this.#ustensilsList = ustensilsList
+        this.view.renderUstensils(this.#ustensilsList)
     }
 
     #getRecipeItemUiState(recipe) {
@@ -50,20 +89,6 @@ class RecipesPresenter {
             })),
             description: recipe.description,
         }
-    }
-
-    #getInitialRecipes() {
-        this.model
-            .getRecipes()
-            .then((recipes) => {
-                this.#recipes = recipes
-                this.view.renderRecipes(
-                    this.#recipes.map(this.#getRecipeItemUiState)
-                )
-            })
-            .catch((error) => {
-                console.log(error)
-            })
     }
 
     onRemoveFilterClick(filterChip) {

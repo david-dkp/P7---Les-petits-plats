@@ -169,15 +169,14 @@ main section {
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(6, auto);
+    max-width: 400px;
+    overflow: auto;
 }
 
 .dropdown-list-item {
     padding-block: 0.4em;
     padding-right: 0.8em;
     min-width: 100px;
-}
-
-.dropdown-item-name {
     font-size: 0.9em;
     font-weight: 400;
 }
