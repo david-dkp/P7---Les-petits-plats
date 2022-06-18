@@ -50,12 +50,15 @@
                         <div
                             class="dropdown-container dropdown-ingredients-container"
                         >
-                            <button class="dropdown-button bg-ingredient">
+                            <button
+                                class="dropdown-button bg-ingredient dropdown-button-ingredients"
+                            >
                                 Ingredients
                                 <i class="fa-solid fa-angle-down"></i>
                             </button>
                             <div
-                                class="dropdown-content-container bg-ingredient"
+                                class="dropdown-content-container bg-ingredient dropdown-content-ingredients"
+                                aria-expanded="false"
                             >
                                 <div
                                     class="search-input dropdown-input bg-ingredient"
@@ -64,92 +67,30 @@
                                         type="text"
                                         placeholder="Rechercher une recette"
                                     />
-                                    <i class="fa-solid fa-angle-up"></i>
+                                    <button
+                                        class="icon-button close-dropdown-button"
+                                        aria-label="Close ingredients dropdown"
+                                    >
+                                        <i class="fa-solid fa-angle-up"></i>
+                                    </button>
                                 </div>
                                 <ul
                                     class="dropdown-list dropdown-ingredients-list"
-                                >
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                    <li class="dropdown-list-item">
-                                        <p class="dropdown-item-name">Coco</p>
-                                    </li>
-                                </ul>
+                                ></ul>
                             </div>
                         </div>
                         <div
                             class="dropdown-container dropdown-appliances-container"
                         >
-                            <button class="dropdown-button bg-appliance">
+                            <button
+                                class="dropdown-button bg-appliance dropdown-button-appliances"
+                            >
                                 Appareils
                                 <i class="fa-solid fa-angle-down"></i>
                             </button>
                             <div
-                                class="dropdown-content-container bg-appliance"
+                                class="dropdown-content-container bg-appliance dropdown-content-appliances"
+                                aria-expanded="false"
                             >
                                 <div
                                     class="search-input dropdown-input bg-appliance"
@@ -158,7 +99,12 @@
                                         type="text"
                                         placeholder="Rechercher une recette"
                                     />
-                                    <i class="fa-solid fa-angle-up"></i>
+                                    <button
+                                        class="icon-button close-dropdown-button"
+                                        aria-label="Close appliances dropdown"
+                                    >
+                                        <i class="fa-solid fa-angle-up"></i>
+                                    </button>
                                 </div>
                                 <ul
                                     class="dropdown-list dropdown-appliances-list"
@@ -168,11 +114,16 @@
                         <div
                             class="dropdown-container dropdown-ustensils-container"
                         >
-                            <button class="dropdown-button bg-ustensil">
+                            <button
+                                class="dropdown-button bg-ustensil dropdown-button-ustensils"
+                            >
                                 Ustensiles
                                 <i class="fa-solid fa-angle-down"></i>
                             </button>
-                            <div class="dropdown-content-container bg-ustensil">
+                            <div
+                                class="dropdown-content-container bg-ustensil dropdown-content-ustensils"
+                                aria-expanded="false"
+                            >
                                 <div
                                     class="search-input dropdown-input bg-ustensil"
                                 >
@@ -180,7 +131,12 @@
                                         type="text"
                                         placeholder="Rechercher une recette"
                                     />
-                                    <i class="fa-solid fa-angle-up"></i>
+                                    <button
+                                        class="icon-button close-dropdown-button"
+                                        aria-label="Close ustensils dropdown"
+                                    >
+                                        <i class="fa-solid fa-angle-up"></i>
+                                    </button>
                                 </div>
                                 <ul
                                     class="dropdown-list dropdown-ustensils-list"

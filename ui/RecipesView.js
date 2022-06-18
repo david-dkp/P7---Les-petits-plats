@@ -2,35 +2,87 @@ import RecipesPresenter from "./RecipesPresenter.js"
 import { createRecipeElement, createFilterChip } from "./recipesFactories.js"
 
 class RecipesView {
-    #previous
+    recipesListElement = document.querySelector(".recipees-list")
+    searchFiltersListElement = document.querySelector(".search-filters-list")
+    dropdownIngredientsContainerElement = document.querySelector(
+        ".dropdown-ingredients-container"
+    )
+    dropdownIngerdientsListElement = document.querySelector(
+        ".dropdown-ingredients-list"
+    )
+
+    dropdownAppliancesContainerElement = document.querySelector(
+        ".dropdown-appliances-container"
+    )
+    dropdownAppliancesListElement = document.querySelector(
+        ".dropdown-appliances-list"
+    )
+
+    dropdownUstensilsContainerElement = document.querySelector(
+        ".dropdown-ustensils-container"
+    )
+    dropdownUstensilsListElement = document.querySelector(
+        ".dropdown-ustensils-list"
+    )
+
+    dropdownButtonIngredientsElement = document.querySelector(
+        ".dropdown-button-ingredients"
+    )
+    dropdownButtonAppliancesElement = document.querySelector(
+        ".dropdown-button-appliances"
+    )
+    dropdownButtonUstensilsElement = document.querySelector(
+        ".dropdown-button-ustensils"
+    )
+
+    dropdownContentIngredientsElement = document.querySelector(
+        ".dropdown-content-ingredients"
+    )
+    dropdownContentAppliancesElement = document.querySelector(
+        ".dropdown-content-appliances"
+    )
+    dropdownContentUstensilsElement = document.querySelector(
+        ".dropdown-content-ustensils"
+    )
+
+    #currentDropdown = null
+
     constructor(presenter) {
-        this.recipesListElement = document.querySelector(".recipees-list")
-        this.searchFiltersListElement = document.querySelector(
-            ".search-filters-list"
-        )
-        this.dropdownIngredientsContainerElement = document.querySelector(
-            ".dropdown-ingredients-container"
-        )
-        this.dropdownIngerdientsListElement = document.querySelector(
-            ".dropdown-ingredients-list"
-        )
-
-        this.dropdownAppliancesContainerElement = document.querySelector(
-            ".dropdown-appliances-container"
-        )
-        this.dropdownAppliancesListElement = document.querySelector(
-            ".dropdown-appliances-list"
-        )
-
-        this.dropdownUstensilsContainerElement = document.querySelector(
-            ".dropdown-ustensils-container"
-        )
-        this.dropdownUstensilsListElement = document.querySelector(
-            ".dropdown-ustensils-list"
-        )
-
         this.presenter = presenter
         this.presenter.setView(this)
+
+        this.dropdownButtonIngredientsElement.addEventListener("click", () => {
+            this.showDropdown({
+                dropdownContainerElement:
+                    this.dropdownIngredientsContainerElement,
+                dropdownContentElement: this.dropdownContentIngredientsElement,
+            })
+        })
+
+        this.dropdownButtonAppliancesElement.addEventListener("click", () => {
+            this.showDropdown({
+                dropdownContainerElement:
+                    this.dropdownAppliancesContainerElement,
+                dropdownContentElement: this.dropdownContentAppliancesElement,
+            })
+        })
+
+        this.dropdownButtonUstensilsElement.addEventListener("click", () => {
+            this.showDropdown({
+                dropdownContainerElement:
+                    this.dropdownUstensilsContainerElement,
+                dropdownContentElement: this.dropdownContentUstensilsElement,
+            })
+        })
+
+        const closeDropDownIconsElement = document.querySelectorAll(
+            ".close-dropdown-button"
+        )
+        closeDropDownIconsElement.forEach((icon) => {
+            icon.addEventListener("click", () => {
+                this.hideDropdown(this.#currentDropdown)
+            })
+        })
     }
 
     renderRecipes(recipes) {
@@ -92,6 +144,25 @@ class RecipesView {
             )
             this.dropdownUstensilsListElement.appendChild(ustensilItemElement)
         })
+    }
+
+    showDropdown(dropdown) {
+        if (this.#currentDropdown) this.hideDropdown(this.#currentDropdown)
+        this.#currentDropdown = dropdown
+        const { dropdownContainerElement, dropdownContentElement } = dropdown
+        dropdownContentElement.setAttribute("aria-expanded", "true")
+        dropdownContentElement.style.display = "flex"
+        dropdownContainerElement.style.width =
+            dropdownContentElement.clientWidth + "px"
+    }
+
+    hideDropdown(dropdown) {
+        const { dropdownContainerElement, dropdownContentElement } = dropdown
+        dropdownContentElement.style.display = "none"
+        dropdownContentElement.setAttribute("aria-expanded", "false")
+        dropdownContainerElement.style.width = "auto"
+
+        this.#currentDropdown = null
     }
 }
 
