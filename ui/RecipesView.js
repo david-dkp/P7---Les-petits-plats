@@ -45,12 +45,20 @@ class RecipesView {
         ".dropdown-content-ustensils"
     )
     searchInputElement = document.querySelector(".search-input input")
+    dropdownIngredientsInputElement = document.querySelector(
+        ".dropdown-ingredients-input"
+    )
+    dropdownAppliancesInputElement = document.querySelector(
+        ".dropdown-appliances-input"
+    )
+    dropdownUstensilsInputElement = document.querySelector(
+        ".dropdown-ustensils-input"
+    )
 
     #currentDropdown = null
 
     constructor(presenter) {
         this.presenter = presenter
-        this.presenter.setView(this)
 
         this.dropdownButtonIngredientsElement.addEventListener("click", () => {
             this.showDropdown({
@@ -88,6 +96,48 @@ class RecipesView {
         this.searchInputElement.addEventListener("keyup", (e) => {
             this.presenter.onSearchQueryChange(e.target.value)
         })
+
+        this.dropdownIngredientsInputElement.addEventListener("keyup", (e) => {
+            this.presenter.onIngredientSearchQueryChange(e.target.value)
+        })
+
+        this.dropdownAppliancesInputElement.addEventListener("keyup", (e) => {
+            this.presenter.onApplianceSearchQueryChange(e.target.value)
+        })
+
+        this.dropdownUstensilsInputElement.addEventListener("keyup", (e) => {
+            this.presenter.onUstensilSearchQueryChange(e.target.value)
+        })
+
+        this.presenter.recipesUiStatesObservable.subscribe(
+            (recipesUiStates) => {
+                this.renderRecipes(recipesUiStates)
+            }
+        )
+
+        this.presenter.filterChipsUiStatesObservable.subscribe(
+            (filterChipsUiStates) => {
+                this.renderFilterChips(filterChipsUiStates)
+            }
+        )
+
+        this.presenter.ingredientsUiStatesObservable.subscribe(
+            (ingredientsUiStates) => {
+                this.renderIngredients(ingredientsUiStates)
+            }
+        )
+
+        this.presenter.appliancesUiStatesObservable.subscribe(
+            (appliancesUiStates) => {
+                this.renderAppliances(appliancesUiStates)
+            }
+        )
+
+        this.presenter.ustensilsUiStatesObservable.subscribe(
+            (ustensilsUiStates) => {
+                this.renderUstensils(ustensilsUiStates)
+            }
+        )
     }
 
     renderRecipes(recipes) {
@@ -123,6 +173,10 @@ class RecipesView {
                 ingredientItemElement
             )
         })
+        this.copyWidthOfElement(
+            this.dropdownIngredientsContainerElement,
+            this.dropdownContentIngredientsElement
+        )
     }
 
     renderAppliances(appliances) {
@@ -136,6 +190,10 @@ class RecipesView {
             )
             this.dropdownAppliancesListElement.appendChild(applianceItemElement)
         })
+        this.copyWidthOfElement(
+            this.dropdownAppliancesContainerElement,
+            this.dropdownContentAppliancesElement
+        )
     }
 
     renderUstensils(ustensils) {
@@ -149,6 +207,14 @@ class RecipesView {
             )
             this.dropdownUstensilsListElement.appendChild(ustensilItemElement)
         })
+        this.copyWidthOfElement(
+            this.dropdownUstensilsContainerElement,
+            this.dropdownContentUstensilsElement
+        )
+    }
+
+    copyWidthOfElement(element, copiedElement) {
+        element.style.width = copiedElement.offsetWidth + "px"
     }
 
     showDropdown(dropdown) {
@@ -157,8 +223,10 @@ class RecipesView {
         const { dropdownContainerElement, dropdownContentElement } = dropdown
         dropdownContentElement.setAttribute("aria-expanded", "true")
         dropdownContentElement.style.display = "flex"
-        dropdownContainerElement.style.width =
-            dropdownContentElement.clientWidth + "px"
+        this.copyWidthOfElement(
+            dropdownContainerElement,
+            dropdownContentElement
+        )
     }
 
     hideDropdown(dropdown) {

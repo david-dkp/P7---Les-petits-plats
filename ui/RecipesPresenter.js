@@ -1,9 +1,13 @@
 import recipesModel from "../data/recipesModel.js"
-import { removeDuplicates } from "../utils/arrayUtils.js"
+import { arrayEquals } from "../utils/arrayUtils.js"
+import Observable from "../utils/Observable.js"
+import { combineObservables } from "../utils/observableUtils.js"
 
 class RecipesPresenter {
-    #recipes = []
-    #filterChipsUiStates = [
+    #recipesObservable = new Observable([])
+    recipesUiStatesObservable = new Observable([])
+
+    filterChipsUiStatesObservable = new Observable([
         {
             type: "ingredient",
             label: "Coco",
@@ -20,11 +24,20 @@ class RecipesPresenter {
             type: "ingredient",
             label: "Milk",
         },
-    ]
-    #ingredientsList = []
-    #appliancesList = []
-    #ustensilsList = []
-    #searchQuery = ""
+    ])
+
+    #ingredientsSearchQueryObservable = new Observable("")
+    #appliancesSearchQueryObservable = new Observable("")
+    #ustensilsSearchQueryObservable = new Observable("")
+
+    #ingredientsObservable = new Observable([])
+    #appliancesObservable = new Observable([])
+    #ustensilsObservable = new Observable([])
+
+    ingredientsUiStatesObservable = new Observable([])
+    appliancesUiStatesObservable = new Observable([])
+    ustensilsUiStatesObservable = new Observable([])
+    #searchQueryObservable = new Observable("")
 
     static getInstance() {
         if (!this.instance) {
@@ -36,48 +49,190 @@ class RecipesPresenter {
     constructor(model) {
         this.model = model
         this.#getInitialData()
+
+        combineObservables(
+            [this.filterChipsUiStatesObservable, this.#searchQueryObservable],
+            (filterChipsUiStates, searchQuery) => {
+                this.loadRecipes()
+            }
+        )
+
+        combineObservables(
+            [this.#ingredientsSearchQueryObservable, this.#recipesObservable],
+            (ingredientsSearchQuery, recipes) => {
+                const ingredients = []
+                recipes.forEach((recipe) => {
+                    for (const ingredient of recipe.ingredients) {
+                        if (
+                            !ingredients.includes(ingredient.ingredient) &&
+                            ingredient.ingredient.includes(
+                                ingredientsSearchQuery
+                            )
+                        ) {
+                            ingredients.push(ingredient.ingredient)
+                        }
+                    }
+                })
+                this.ingredientsUiStatesObservable.notify(ingredients)
+            }
+        )
+
+        combineObservables(
+            [this.#appliancesSearchQueryObservable, this.#recipesObservable],
+            (appliancesSearchQuery, recipes) => {
+                const appliances = []
+                recipes.forEach((recipe) => {
+                    if (
+                        !appliances.includes(recipe.appliance) &&
+                        recipe.appliance.includes(appliancesSearchQuery)
+                    ) {
+                        appliances.push(recipe.appliance)
+                    }
+                })
+
+                this.appliancesUiStatesObservable.notify(appliances)
+            }
+        )
+
+        combineObservables(
+            [this.#ustensilsSearchQueryObservable, this.#recipesObservable],
+            (ustensilsSearchQuery, recipes) => {
+                const ustensils = []
+                recipes.forEach((recipe) => {
+                    for (const ustensil of recipe.ustensils) {
+                        if (
+                            !ustensils.includes(ustensil) &&
+                            ustensil.includes(ustensilsSearchQuery)
+                        ) {
+                            ustensils.push(ustensil)
+                        }
+                    }
+                })
+
+                this.ustensilsUiStatesObservable.notify(ustensils)
+            }
+        )
+
+        this.#recipesObservable.subscribe((recipes) => {
+            this.recipesUiStatesObservable.notify(
+                recipes.map((recipe) => this.#getRecipeItemUiState(recipe))
+            )
+        })
     }
 
     #getInitialData() {
         this.model.getRecipes().then((recipes) => {
-            this.#setRecipes(recipes)
+            this.#recipesObservable.notify(recipes)
         })
         this.model.getIngredients().then((ingredients) => {
-            this.#setIngredients(ingredients)
+            this.#ingredientsObservable.notify(ingredients)
         })
         this.model.getAppliances().then((appliances) => {
-            this.#setAppliances(appliances)
+            this.#appliancesObservable.notify(appliances)
         })
         this.model.getUstensils().then((ustensils) => {
-            this.#setUstensils(ustensils)
+            this.#ustensilsObservable.notify(ustensils)
         })
     }
 
-    async setView(view) {
-        this.view = view
-        this.view.renderFilterChips(this.#filterChipsUiStates)
-        this.view.renderRecipes(this.#recipes.map(this.#getRecipeItemUiState))
+    onRemoveFilterClick(filterChip) {
+        const filterChipIndex =
+            this.filterChipsUiStatesObservable.value.findIndex(
+                (filterChipUiState) =>
+                    filterChipUiState.type === filterChip.type &&
+                    filterChipUiState.label === filterChip.label
+            )
+
+        if (filterChipIndex !== -1) {
+            const newFilterChipsUiStates = [
+                ...this.filterChipsUiStatesObservable.value.slice(
+                    0,
+                    filterChipIndex
+                ),
+                ...this.filterChipsUiStatesObservable.value.slice(
+                    filterChipIndex + 1
+                ),
+            ]
+            this.filterChipsUiStatesObservable.notify(newFilterChipsUiStates)
+        }
     }
 
-    #setRecipes(recipes) {
-        this.#recipes = recipes
-        this.view.renderRecipes(this.#recipes.map(this.#getRecipeItemUiState))
-        this.changeFiltersListForRecipes(recipes)
+    onIngredientClick(ingredient) {
+        const filterChipIndex =
+            this.filterChipsUiStatesObservable.value.findIndex(
+                (filterChipUiState) =>
+                    filterChipUiState.type === "ingredient" &&
+                    filterChipUiState.label === ingredient
+            )
+        if (filterChipIndex === -1) {
+            this.filterChipsUiStatesObservable.notify([
+                ...this.filterChipsUiStatesObservable.value,
+                {
+                    type: "ingredient",
+                    label: ingredient,
+                },
+            ])
+        }
     }
 
-    #setIngredients(ingredientsList) {
-        this.#ingredientsList = ingredientsList
-        this.view.renderIngredients(this.#ingredientsList)
+    onApplianceClick(appliance) {
+        const filterChipIndex =
+            this.filterChipsUiStatesObservable.value.findIndex(
+                (filterChipUiState) =>
+                    filterChipUiState.type === "appliance" &&
+                    filterChipUiState.label === appliance
+            )
+        if (filterChipIndex === -1) {
+            this.filterChipsUiStatesObservable.notify([
+                ...this.filterChipsUiStatesObservable.value,
+                {
+                    type: "appliance",
+                    label: appliance,
+                },
+            ])
+        }
     }
 
-    #setAppliances(appliancesList) {
-        this.#appliancesList = appliancesList
-        this.view.renderAppliances(this.#appliancesList)
+    onUstensilClick(ustensil) {
+        const filterChipIndex =
+            this.filterChipsUiStatesObservable.value.findIndex(
+                (filterChipUiState) =>
+                    filterChipUiState.type === "ustensil" &&
+                    filterChipUiState.label === ustensil
+            )
+        if (filterChipIndex === -1) {
+            this.filterChipsUiStatesObservable.notify([
+                ...this.filterChipsUiStatesObservable.value,
+                {
+                    type: "ustensil",
+                    label: ustensil,
+                },
+            ])
+        }
     }
 
-    #setUstensils(ustensilsList) {
-        this.#ustensilsList = ustensilsList
-        this.view.renderUstensils(this.#ustensilsList)
+    getFilterIngredients() {
+        return this.filterChipsUiStatesObservable.value
+            .filter(
+                (filterChipUiState) => filterChipUiState.type === "ingredient"
+            )
+            .map((filterChipUiState) => filterChipUiState.label)
+    }
+
+    getFilterAppliances() {
+        return this.filterChipsUiStatesObservable.value
+            .filter(
+                (filterChipUiState) => filterChipUiState.type === "appliance"
+            )
+            .map((filterChipUiState) => filterChipUiState.label)
+    }
+
+    getFilterUstensils() {
+        return this.filterChipsUiStatesObservable.value
+            .filter(
+                (filterChipUiState) => filterChipUiState.type === "ustensil"
+            )
+            .map((filterChipUiState) => filterChipUiState.label)
     }
 
     #getRecipeItemUiState(recipe) {
@@ -94,142 +249,33 @@ class RecipesPresenter {
         }
     }
 
-    onRemoveFilterClick(filterChip) {
-        const filterChipIndex = this.#filterChipsUiStates.findIndex(
-            (filterChipUiState) =>
-                filterChipUiState.type === filterChip.type &&
-                filterChipUiState.label === filterChip.label
-        )
-        if (filterChipIndex !== -1) {
-            this.#filterChipsUiStates.splice(filterChipIndex, 1)
-            this.view.renderFilterChips(this.#filterChipsUiStates)
-        }
-        this.loadRecipes()
-    }
-
-    onIngredientClick(ingredient) {
-        const filterChipIndex = this.#filterChipsUiStates.findIndex(
-            (filterChipUiState) =>
-                filterChipUiState.type === "ingredient" &&
-                filterChipUiState.label === ingredient
-        )
-        if (filterChipIndex === -1) {
-            this.#filterChipsUiStates.push({
-                type: "ingredient",
-                label: ingredient,
-            })
-            this.view.renderFilterChips(this.#filterChipsUiStates)
-        } else {
-            return
-        }
-
-        this.loadRecipes()
-    }
-
-    onApplianceClick(appliance) {
-        const filterChipIndex = this.#filterChipsUiStates.findIndex(
-            (filterChipUiState) =>
-                filterChipUiState.type === "appliance" &&
-                filterChipUiState.label === appliance
-        )
-        if (filterChipIndex === -1) {
-            this.#filterChipsUiStates.push({
-                type: "appliance",
-                label: appliance,
-            })
-            this.view.renderFilterChips(this.#filterChipsUiStates)
-        } else {
-            return
-        }
-
-        this.loadRecipes()
-    }
-
-    onUstensilClick(ustensil) {
-        const filterChipIndex = this.#filterChipsUiStates.findIndex(
-            (filterChipUiState) =>
-                filterChipUiState.type === "ustensil" &&
-                filterChipUiState.label === ustensil
-        )
-        if (filterChipIndex === -1) {
-            this.#filterChipsUiStates.push({
-                type: "ustensil",
-                label: ustensil,
-            })
-            this.view.renderFilterChips(this.#filterChipsUiStates)
-        } else {
-            return
-        }
-
-        this.loadRecipes()
-    }
-
-    getFilterIngredients() {
-        return this.#filterChipsUiStates
-            .filter(
-                (filterChipUiState) => filterChipUiState.type === "ingredient"
-            )
-            .map((filterChipUiState) => filterChipUiState.label)
-    }
-
-    getFilterAppliances() {
-        return this.#filterChipsUiStates
-            .filter(
-                (filterChipUiState) => filterChipUiState.type === "appliance"
-            )
-            .map((filterChipUiState) => filterChipUiState.label)
-    }
-
-    getFilterUstensils() {
-        return this.#filterChipsUiStates
-            .filter(
-                (filterChipUiState) => filterChipUiState.type === "ustensil"
-            )
-            .map((filterChipUiState) => filterChipUiState.label)
-    }
-
     loadRecipes() {
         this.model
             .getRecipesWithFilter({
                 ingredients: this.getFilterIngredients(),
                 appliances: this.getFilterAppliances(),
                 ustencils: this.getFilterUstensils(),
-                searchQuery: this.#searchQuery,
+                searchQuery: this.#searchQueryObservable.value,
             })
             .then((recipes) => {
-                this.#setRecipes(recipes)
+                this.#recipesObservable.notify(recipes)
             })
-    }
-
-    changeFiltersListForRecipes(recipes) {
-        const ingredients = []
-        const appliances = []
-        const ustensils = []
-        recipes.forEach((recipe) => {
-            recipe.ingredients.forEach((ingredient) => {
-                if (!ingredients.includes(ingredient.ingredient)) {
-                    ingredients.push(ingredient.ingredient)
-                }
-            })
-            if (!appliances.includes(recipe.appliance)) {
-                appliances.push(recipe.appliance)
-            }
-
-            recipe.ustensils.forEach((ustensil) => {
-                if (!ustensils.includes(ustensil)) {
-                    ustensils.push(ustensil)
-                }
-            })
-        })
-        this.#setIngredients(ingredients)
-        this.#setAppliances(appliances)
-        this.#setUstensils(ustensils)
     }
 
     onSearchQueryChange(searchQuery) {
-        console.log(searchQuery)
-        this.#searchQuery = searchQuery
-        this.loadRecipes()
+        this.#searchQueryObservable.notify(searchQuery)
+    }
+
+    onIngredientSearchQueryChange(searchQuery) {
+        this.#ingredientsSearchQueryObservable.notify(searchQuery)
+    }
+
+    onApplianceSearchQueryChange(searchQuery) {
+        this.#appliancesSearchQueryObservable.notify(searchQuery)
+    }
+
+    onUstensilSearchQueryChange(searchQuery) {
+        this.#ustensilsSearchQueryObservable.notify(searchQuery)
     }
 }
 
