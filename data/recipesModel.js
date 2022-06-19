@@ -47,13 +47,34 @@ const getRecipesWithFilter = async ({
     ustensils,
     searchQuery,
 }) => {
-    const searchQueryWords = searchQuery.trim().split(" ")
+    const searchQueryWords = searchQuery
+        .trim()
+        .split(" ")
+        .map((word) => word.toLowerCase())
+
+    const getRecipeIngredients = (recipe) => {
+        return recipe.ingredients.map((ingredient) => ingredient.ingredient)
+    }
+
     const recipeHasSearchQuery = (recipe) => {
-        return stringContainsArrayWords(recipe.name, searchQueryWords)
+        return (
+            stringContainsArrayWords(
+                recipe.name.toLowerCase(),
+                searchQueryWords
+            ) ||
+            stringContainsArrayWords(
+                recipe.description.toLowerCase(),
+                searchQueryWords
+            ) ||
+            stringContainsArrayWords(
+                getRecipeIngredients(recipe).join(" ").toLowerCase(),
+                searchQueryWords
+            )
+        )
     }
     const recipeHasIngredients = (recipe) => {
-        return ingredients.every((ingredient) =>
-            recipe.ingredients.includes(ingredient)
+        return ingredients.some((ingredient) =>
+            getRecipeIngredients(recipe).includes(ingredient)
         )
     }
 
@@ -62,9 +83,7 @@ const getRecipesWithFilter = async ({
     }
 
     const recipeHasUstensils = (recipe) => {
-        return ustencils.every((ustensil) =>
-            recipe.ustencils.includes(ustensil)
-        )
+        return ustensils.some((ustensil) => recipe.ustensils.includes(ustensil))
     }
 
     const validators = [recipeHasSearchQuery]
@@ -74,7 +93,7 @@ const getRecipesWithFilter = async ({
     if (!arrayIsEmpty(appliances)) {
         validators.push(recipeHasAppliances)
     }
-    if (!arrayIsEmpty(ustencils)) {
+    if (!arrayIsEmpty(ustensils)) {
         validators.push(recipeHasUstensils)
     }
 
