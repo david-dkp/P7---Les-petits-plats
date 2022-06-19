@@ -221,7 +221,6 @@ class RecipesView {
         if (this.#currentDropdown) this.hideDropdown(this.#currentDropdown)
         this.#currentDropdown = dropdown
         const { dropdownContainerElement, dropdownContentElement } = dropdown
-        dropdownContentElement.setAttribute("aria-expanded", "true")
         dropdownContentElement.style.display = "flex"
         this.copyWidthOfElement(
             dropdownContainerElement,
@@ -232,7 +231,6 @@ class RecipesView {
     hideDropdown(dropdown) {
         const { dropdownContainerElement, dropdownContentElement } = dropdown
         dropdownContentElement.style.display = "none"
-        dropdownContentElement.setAttribute("aria-expanded", "false")
         dropdownContainerElement.style.width = "auto"
 
         this.#currentDropdown = null

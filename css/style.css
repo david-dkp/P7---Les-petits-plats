@@ -30,7 +30,7 @@ main {
     align-items: center;
 }
 
-main section {
+main > div {
     width: 100%;
     padding-inline: 1rem;
     max-width: 1100px;
