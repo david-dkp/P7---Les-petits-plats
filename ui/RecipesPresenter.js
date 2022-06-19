@@ -258,7 +258,7 @@ class RecipesPresenter {
             .getRecipesWithFilter({
                 ingredients: this.getFilterIngredients(),
                 appliances: this.getFilterAppliances(),
-                ustencils: this.getFilterUstensils(),
+                ustensils: this.getFilterUstensils(),
                 searchQuery: this.#searchQueryObservable.value,
             })
             .then((recipes) => {
