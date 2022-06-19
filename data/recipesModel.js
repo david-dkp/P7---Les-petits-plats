@@ -47,13 +47,19 @@ const getRecipesWithFilter = async ({
     ustensils,
     searchQuery,
 }) => {
+    ingredients = ingredients.map((ingredient) => ingredient.toLowerCase())
+    appliances = appliances.map((appliance) => appliance.toLowerCase())
+    ustensils = ustensils.map((ustensil) => ustensil.toLowerCase())
+
     const searchQueryWords = searchQuery
         .trim()
         .split(" ")
         .map((word) => word.toLowerCase())
 
     const getRecipeIngredients = (recipe) => {
-        return recipe.ingredients.map((ingredient) => ingredient.ingredient)
+        return recipe.ingredients.map((ingredient) =>
+            ingredient.ingredient.toLowerCase()
+        )
     }
 
     const recipeHasSearchQuery = (recipe) => {
@@ -79,12 +85,14 @@ const getRecipesWithFilter = async ({
     }
 
     const recipeHasAppliances = (recipe) => {
-        return appliances.includes(recipe.appliance)
+        return appliances.includes(recipe.appliance.toLowerCase())
     }
 
     const recipeHasUstensils = (recipe) => {
         return ustensils.every((ustensil) =>
-            recipe.ustensils.includes(ustensil)
+            recipe.ustensils
+                .map((ustensil) => ustensil.toLowerCase())
+                .includes(ustensil)
         )
     }
 
