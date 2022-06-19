@@ -36,7 +36,7 @@ class RecipesPresenter {
         combineObservables(
             [this.filterChipsUiStatesObservable, this.#searchQueryObservable],
             (filterChipsUiStates, searchQuery) => {
-                if (searchQuery.length >= 3) {
+                if (searchQuery.length >= 3 || searchQuery.length === 0) {
                     this.loadRecipes()
                 }
             }
