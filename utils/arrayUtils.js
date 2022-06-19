@@ -19,3 +19,7 @@ export const stringContainsArrayWords = (string, array) => {
     }
     return false
 }
+
+export const arrayIsEmpty = (array) => {
+    return array && array.length === 0
+}
