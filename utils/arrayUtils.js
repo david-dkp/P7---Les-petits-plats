@@ -10,3 +10,11 @@ export const arrayEquals = (a, b) => {
         a.every((val, index) => val === b[index])
     )
 }
+
+export const stringContainsArrayWords = (string, array) => {
+    return array.some((word) => string.includes(word))
+}
+
+export const arrayIsEmpty = (array) => {
+    return !array || array.length === 0
+}
