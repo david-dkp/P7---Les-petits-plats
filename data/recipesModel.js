@@ -64,6 +64,14 @@ const getRecipesWithFilter = async ({
         return recipeIngredients
     }
 
+    const getRecipeUstensils = (recipe) => {
+        const recipeUstensils = []
+        for (const ustensil of recipe.ustensils) {
+            recipeUstensils.push(ustensil.toLowerCase())
+        }
+        return recipeUstensils
+    }
+
     const recipeHasSearchQuery = (recipe) => {
         return (
             stringContainsArrayWords(
@@ -82,6 +90,7 @@ const getRecipesWithFilter = async ({
     }
     const recipeHasIngredients = (recipe) => {
         const recipeIngredients = getRecipeIngredients(recipe)
+
         for (const ingredient of ingredients) {
             if (!recipeIngredients.includes(ingredient.toLowerCase())) {
                 return false
@@ -91,12 +100,12 @@ const getRecipesWithFilter = async ({
     }
 
     const recipeHasAppliances = (recipe) => {
-        return appliances.includes(recipe.appliance)
+        return appliances.includes(recipe.appliance.toLowerCase())
     }
 
     const recipeHasUstensils = (recipe) => {
         for (const ustensil of ustensils) {
-            if (!recipe.ustensils.includes(ustensil)) {
+            if (!getRecipeUstensils(recipe).includes(ustensil)) {
                 return false
             }
         }
