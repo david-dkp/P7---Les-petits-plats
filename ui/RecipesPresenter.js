@@ -50,9 +50,9 @@ class RecipesPresenter {
                     for (const ingredient of recipe.ingredients) {
                         if (
                             !ingredients.includes(ingredient.ingredient) &&
-                            ingredient.ingredient.includes(
-                                ingredientsSearchQuery
-                            )
+                            ingredient.ingredient
+                                .toLowerCase()
+                                .includes(ingredientsSearchQuery.toLowerCase())
                         ) {
                             ingredients.push(ingredient.ingredient)
                         }
@@ -76,7 +76,9 @@ class RecipesPresenter {
                 recipes.forEach((recipe) => {
                     if (
                         !appliances.includes(recipe.appliance) &&
-                        recipe.appliance.includes(appliancesSearchQuery)
+                        recipe.appliance
+                            .toLowerCase()
+                            .includes(appliancesSearchQuery.toLowerCase())
                     ) {
                         appliances.push(recipe.appliance)
                     }
@@ -100,7 +102,9 @@ class RecipesPresenter {
                     for (const ustensil of recipe.ustensils) {
                         if (
                             !ustensils.includes(ustensil) &&
-                            ustensil.includes(ustensilsSearchQuery)
+                            ustensil
+                                .toLowerCase()
+                                .includes(ustensilsSearchQuery.toLowerCase())
                         ) {
                             ustensils.push(ustensil)
                         }
