@@ -73,7 +73,14 @@ class RecipesPresenter {
                         }
                     }
                 })
-                this.ingredientsUiStatesObservable.notify(ingredients)
+                if (
+                    !arrayEquals(
+                        ingredients,
+                        this.ingredientsUiStatesObservable.value
+                    )
+                ) {
+                    this.ingredientsUiStatesObservable.notify(ingredients)
+                }
             }
         )
 
@@ -89,8 +96,14 @@ class RecipesPresenter {
                         appliances.push(recipe.appliance)
                     }
                 })
-
-                this.appliancesUiStatesObservable.notify(appliances)
+                if (
+                    !arrayEquals(
+                        appliances,
+                        this.appliancesUiStatesObservable.value
+                    )
+                ) {
+                    this.appliancesUiStatesObservable.notify(appliances)
+                }
             }
         )
 
@@ -108,8 +121,14 @@ class RecipesPresenter {
                         }
                     }
                 })
-
-                this.ustensilsUiStatesObservable.notify(ustensils)
+                if (
+                    !arrayEquals(
+                        ustensils,
+                        this.ustensilsUiStatesObservable.value
+                    )
+                ) {
+                    this.ustensilsUiStatesObservable.notify(ustensils)
+                }
             }
         )
 
