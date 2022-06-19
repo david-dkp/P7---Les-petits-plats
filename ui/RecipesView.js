@@ -173,10 +173,17 @@ class RecipesView {
                 ingredientItemElement
             )
         })
+
         this.copyWidthOfElement(
             this.dropdownIngredientsContainerElement,
             this.dropdownContentIngredientsElement
         )
+
+        this.showDropdown({
+            dropdownContainerElement: this.dropdownIngredientsContainerElement,
+            dropdownContentElement: this.dropdownContentIngredientsElement,
+        })
+        this.hideDropdown(this.#currentDropdown)
     }
 
     renderAppliances(appliances) {
@@ -194,6 +201,12 @@ class RecipesView {
             this.dropdownAppliancesContainerElement,
             this.dropdownContentAppliancesElement
         )
+
+        this.showDropdown({
+            dropdownContainerElement: this.dropdownAppliancesContainerElement,
+            dropdownContentElement: this.dropdownContentAppliancesElement,
+        })
+        this.hideDropdown(this.#currentDropdown)
     }
 
     renderUstensils(ustensils) {
@@ -211,6 +224,11 @@ class RecipesView {
             this.dropdownUstensilsContainerElement,
             this.dropdownContentUstensilsElement
         )
+        this.showDropdown({
+            dropdownContainerElement: this.dropdownUstensilsContainerElement,
+            dropdownContentElement: this.dropdownContentUstensilsElement,
+        })
+        this.hideDropdown(this.#currentDropdown)
     }
 
     copyWidthOfElement(element, copiedElement) {
