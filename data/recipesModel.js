@@ -43,7 +43,7 @@ const getRecipes = async () => {
 const getRecipesWithFilter = async ({
     ingredients,
     appliances,
-    ustencils,
+    ustensils,
     searchQuery,
 }) => {
     return actualRecipes
