@@ -7,24 +7,7 @@ class RecipesPresenter {
     #recipesObservable = new Observable([])
     recipesUiStatesObservable = new Observable([])
 
-    filterChipsUiStatesObservable = new Observable([
-        {
-            type: "ingredient",
-            label: "Coco",
-        },
-        {
-            type: "appliance",
-            label: "Four",
-        },
-        {
-            type: "ustensil",
-            label: "Spoon",
-        },
-        {
-            type: "ingredient",
-            label: "Milk",
-        },
-    ])
+    filterChipsUiStatesObservable = new Observable([])
 
     #ingredientsSearchQueryObservable = new Observable("")
     #appliancesSearchQueryObservable = new Observable("")
