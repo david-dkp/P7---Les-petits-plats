@@ -1,4 +1,5 @@
 import recipes from "../assets/recipes.js"
+import { stringContainsArrayWords } from "../utils/arrayUtils.js"
 
 let actualRecipes = recipes
 

@@ -10,3 +10,12 @@ export const arrayEquals = (a, b) => {
         a.every((val, index) => val === b[index])
     )
 }
+
+export const stringContainsArrayWords = (string, array) => {
+    for (const word of array) {
+        if (string.indexOf(word) !== -1) {
+            return true
+        }
+    }
+    return false
+}
