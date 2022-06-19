@@ -55,6 +55,8 @@ class RecipesView {
         ".dropdown-ustensils-input"
     )
 
+    noRecipesTextElement = document.querySelector(".no-recipes-text")
+
     #currentDropdown = null
 
     constructor(presenter) {
@@ -141,6 +143,11 @@ class RecipesView {
     }
 
     renderRecipes(recipes) {
+        if (recipes.length === 0) {
+            this.noRecipesTextElement.style.display = "block"
+        } else {
+            this.noRecipesTextElement.style.display = "none"
+        }
         this.recipesListElement.textContent = ""
         recipes.forEach((recipe) => {
             const recipeItemElement = createRecipeElement(recipe)

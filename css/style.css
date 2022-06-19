@@ -254,3 +254,10 @@ main > div {
 .recipe-ingredient-name {
     font-weight: 700;
 }
+
+.no-recipes-text {
+    color: gray;
+    font-size: 1.5em;
+    margin-top: 3rem;
+    display: none;
+}
