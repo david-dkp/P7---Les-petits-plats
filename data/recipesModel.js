@@ -73,7 +73,7 @@ const getRecipesWithFilter = async ({
         )
     }
     const recipeHasIngredients = (recipe) => {
-        return ingredients.some((ingredient) =>
+        return ingredients.every((ingredient) =>
             getRecipeIngredients(recipe).includes(ingredient)
         )
     }
@@ -83,7 +83,9 @@ const getRecipesWithFilter = async ({
     }
 
     const recipeHasUstensils = (recipe) => {
-        return ustensils.some((ustensil) => recipe.ustensils.includes(ustensil))
+        return ustensils.every((ustensil) =>
+            recipe.ustensils.includes(ustensil)
+        )
     }
 
     const validators = [recipeHasSearchQuery]
