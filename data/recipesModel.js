@@ -47,6 +47,10 @@ const getRecipesWithFilter = async ({
     ustensils,
     searchQuery,
 }) => {
+    ingredients = ingredients.map((ingredient) => ingredient.toLowerCase())
+    appliances = appliances.map((appliance) => appliance.toLowerCase())
+    ustensils = ustensils.map((ustensil) => ustensil.toLowerCase())
+
     const searchQueryWords = searchQuery
         .trim()
         .split(" ")
