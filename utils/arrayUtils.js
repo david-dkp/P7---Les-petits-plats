@@ -16,5 +16,5 @@ export const stringContainsArrayWords = (string, array) => {
 }
 
 export const arrayIsEmpty = (array) => {
-    return array || array.length === 0
+    return array && array.length === 0
 }
